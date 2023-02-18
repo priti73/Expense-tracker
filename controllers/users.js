@@ -1,4 +1,4 @@
-const signup = require('../models/users');
+const user = require('../models/users');
 
 function validatestring(string){
    if(string==undefined || string.length===0)
@@ -17,7 +17,7 @@ exports.signup=async (req,res,next)=>{
          return res.status(400).json({error:"ALL feilds are required"})
        }
      
-      const data =await signup.create({
+      const data =await user.create({
          name:name,
          email:email,
          password: password

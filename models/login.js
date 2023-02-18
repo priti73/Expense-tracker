@@ -1,9 +1,9 @@
-const Sequelize=require('sequelize');
+const Sequelize= require('sequelize');
 
 const sequelize=require('../util/database');
 
-const User=sequelize.define('users',{
-  id:{
+const login=sequelize.define('login',{
+   id:{
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
@@ -11,17 +11,13 @@ const User=sequelize.define('users',{
   },
    email:{
     type: Sequelize.STRING,
-    allowNull:false,
-    unique:true
-    },
+    allowNull: false
+ },
    password:{
     type:Sequelize.STRING,
     allowNull:false
-      },
-   name:{
-    type: Sequelize.STRING,
-    allowNull:false
-   }
+   } 
 });
 
-module.exports =User;
+module.exports =login;
+

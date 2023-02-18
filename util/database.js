@@ -3,7 +3,7 @@ const Sequelize=require('sequelize');
 //     dialect: 'mysql',
 //     host: 'localhost'
 // });
-const sequelize=new Sequelize('expense','root','PFH#23kgrw9',{
+const sequelize=new Sequelize('pritidb','root','Priti@3298',{
     dialect: 'mysql',
     host: 'localhost'
 });
