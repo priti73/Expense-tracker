@@ -16,6 +16,7 @@ app.set('views', 'views');
 
 const usersrouteRoutes = require('./routes/signup');
 const loginRoutes = require('./routes/login');
+const expenseRoutes=require('./routes/expense');
 
 
 app.use(bodyParser.json({ extended: false }));
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(usersrouteRoutes);
 app.use(loginRoutes);
+app.use(expenseRoutes);
 //app.use(errorController.get404);
 
 sequelize

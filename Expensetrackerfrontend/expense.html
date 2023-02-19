@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Making an Expense tracker app</title>
+    <link rel="stylesheet" href="style.css">  
+  </head>
+  <body>
+    <header>
+      <h1>Making an Expense tracker app</h1>
+    </header>
+
+    <section class="container">
+      <form id="my-form">
+        <h1>Record Expenses</h1>
+        <div class="msg"></div>
+        <div>
+          <label for="expenseamount">Choose Amount:</label>
+          <input type="text" id="amount">
+        </div>
+        <div>
+          <label for="description">Choose Description:</label>
+          <input type="text" id="description">
+        </div>
+        <div>
+            <label for="category">Choose Category:</label>
+            <select id="category" name="category">
+              <option value="food">food</option>
+              <option value="vehicle">vehicle</option>
+              <option value="cloth">cloth</option>
+              <option value="Petrol">Petrol</option>
+            </select>
+          </div>
+        <input class="btn" type="submit" value="Add Expense" id="submit">
+      </form>
+
+      <ul id="user"></ul>
+
+
+    </section> 
+    <ul id='listofusers'></ul>
+
+    <script src="expense.js">
+      </script> >
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.4.1/axios.min.js">
+      </script>
+  </body>
+</html>
+   

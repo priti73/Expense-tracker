@@ -24,7 +24,7 @@ exports.login= async (req,res,next)=>{
             }
             else if(result===true){
             console.log(user[0].password);
-            res.status(200).json({ success: true, message:"user logged successfully"})
+            res.status(201).json({ success: true, message:"user logged successfully"})
             }
     
             else{
