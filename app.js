@@ -27,8 +27,8 @@ app.use(loginRoutes);
 //app.use(errorController.get404);
 
 sequelize
-.sync()
-//.sync({force: true})
+//.sync()
+.sync({force: true})
 .then(result=>{
    app.listen(3000);
 })
