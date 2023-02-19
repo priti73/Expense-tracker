@@ -5,6 +5,10 @@ const bodyParser = require('body-parser');
 
 //const errorController = require('./controllers/error');
 const sequelize=require('./util/database');
+const User=require('./models/signup');
+const Expense=require('./models/expense');
+
+
 var cors =require('cors');
 
 const app = express();
@@ -27,6 +31,9 @@ app.use(usersrouteRoutes);
 app.use(loginRoutes);
 app.use(expenseRoutes);
 //app.use(errorController.get404);
+
+User.hasMany(Expense);
+Expense.belongsTo(User);
 
 sequelize
 .sync()

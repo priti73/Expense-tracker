@@ -13,7 +13,9 @@ exports.postExpense=async (req,res,next)=>{
       const data =await Expense.create({
          expenseAmount:amount,
          description:description,
-         category: category
+         category: category,
+         signupId:req.user.id
+         
       });
       console.log('new expense');
       res.status(201).json({newexpense:data});
@@ -28,7 +30,7 @@ exports.postExpense=async (req,res,next)=>{
  
 exports.getAllExpense = async (req, res, next) => {
    try{
-        const expenses=await Expense.findAll();
+        const expenses=await Expense.findAll({where:{signupid:req.user.id}});
         console.log('get user');
         res.status(201).json({allexpenses: expenses});
       }

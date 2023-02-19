@@ -17,7 +17,8 @@ function onSubmit(e){
             expenseAmount:expenseAmount.value,
             category:category.value
         }
-        axios.post("http://localhost:3000/expense/add-expense",obj)
+        const token=localStorage.getItem('token');
+        axios.post("http://localhost:3000/expense/add-expense",obj,{headers: {'Authentication' :token}})
         .then((response) =>{
           showUserOnScreen(response.data.newexpense)
           localStorage.setItem(response.data.newexpense.id,JSON.stringify(obj));
@@ -31,8 +32,10 @@ function onSubmit(e){
         category.value='';
            }
 }
+
 document.addEventListener("DOMContentLoaded", () => {  
-    axios.get("http://localhost:3000/expense/get-expense")
+    const token=localStorage.getItem('token');
+    axios.get("http://localhost:3000/expense/get-expense",{headers: {'Authentication' :token}})
    .then((response)  =>{
      console.log(response);
      for(var i=0;i<response.data.allexpenses.length;i++){
@@ -43,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => { 
     console.log(err);
    })
 });
+
 function showUserOnScreen(user){
     const parentNode=document.getElementById('listofusers');
     console.log(parentNode);
@@ -52,6 +56,7 @@ function showUserOnScreen(user){
     </li>`
     parentNode.innerHTML=parentNode.innerHTML+childHTML;
 }
+
 function deleteExpense(userid){
           axios.delete(`http://localhost:3000/expense/delete-expense/${userid}`)
               .then((response) =>{
@@ -62,6 +67,7 @@ function deleteExpense(userid){
               console.log(err);
               })
         }
+
 function removeUserFromScreen(userid){
     const parentNode=document.getElementById('listofusers');
     const childToBeDeleted=document.getElementById(userid);
@@ -69,6 +75,7 @@ function removeUserFromScreen(userid){
         parentNode.removeChild(childToBeDeleted)
     }
 }
+
 function EditExpense(userid){
     axios.get(`http://localhost:3000/expense/get-expense/${userid}`)
    .then((response) =>{

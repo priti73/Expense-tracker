@@ -14,7 +14,8 @@ const password=document.querySelector('#password');
     logindetails)
     if(response.status==201){
         //alert(response.data.message)
-       window.location.href="./expense.html"
+        localStorage.setItem('token',response.data.token);
+        window.location.href="./expense.html"
        
     }
     

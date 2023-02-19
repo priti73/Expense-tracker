@@ -1,6 +1,7 @@
 //const login = require('../models/login');
 const signup=require('../models/signup');
 const bcrypt=require('bcrypt');
+const jwt=require('jsonwebtoken');
 
 function validatestring(string){
    if(string==undefined || string.length===0)
@@ -8,6 +9,10 @@ function validatestring(string){
     else {
       return false;
     }
+}
+
+function generateToken(id,name){
+  return jwt.sign({userid:id,name:name},'qweryyuioplkjhgfdsazxxcvbnm');
 }
 
 exports.login= async (req,res,next)=>{
@@ -24,7 +29,8 @@ exports.login= async (req,res,next)=>{
             }
             else if(result===true){
             console.log(user[0].password);
-            res.status(201).json({ success: true, message:"user logged successfully"})
+            res.status(201).json({ success: true, message:"user logged successfully"
+          ,token:generateToken(user[0].id,user[0].name)})
             }
     
             else{
