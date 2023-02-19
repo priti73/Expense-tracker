@@ -1,4 +1,4 @@
-const user = require('../models/users');
+const user = require('../models/signup');
 const bcrypt=require('bcrypt');
 
 function validatestring(string){

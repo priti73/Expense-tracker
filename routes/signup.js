@@ -1,7 +1,7 @@
 const path= require('path');
 
 const express=require('express');
-const userscontroller=require('../controllers/users');
+const userscontroller=require('../controllers/signup');
 
 const router=express.Router();
 

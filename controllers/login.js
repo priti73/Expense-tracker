@@ -1,5 +1,5 @@
 //const login = require('../models/login');
-const signup=require('../models/users');
+const signup=require('../models/signup');
 const bcrypt=require('bcrypt');
 
 function validatestring(string){

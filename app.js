@@ -14,7 +14,7 @@ app.use(cors());
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-const usersrouteRoutes = require('./routes/users');
+const usersrouteRoutes = require('./routes/signup');
 const loginRoutes = require('./routes/login');
 
 
@@ -27,8 +27,8 @@ app.use(loginRoutes);
 //app.use(errorController.get404);
 
 sequelize
-//.sync()
-.sync({force: true})
+.sync()
+//.sync({force: true})
 .then(result=>{
    app.listen(3000);
 })
