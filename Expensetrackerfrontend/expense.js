@@ -4,6 +4,7 @@ const expenseAmount=document.querySelector('#amount');
 const category=document.querySelector('#category');
 const msg=document.querySelector('.msg');
 myForm.addEventListener('submit', onSubmit);
+//const Razorpay=require('razorpay');
 function onSubmit(e){
     e.preventDefault();
     if(expenseAmount==='' ||description===''||  category===''){
@@ -32,6 +33,38 @@ function onSubmit(e){
         category.value='';
            }
 }
+
+document.getElementById('rzp-button').onclick=async function(e){
+    const token=localStorage.getItem('token');
+    const response=await axios.get('http://localhost:3000/purchase/purchasepremium',{headers: {'Authentication' :token}})
+    console.log(response.data.key_id);
+    console.log(response.data.order.id);
+    var options={
+        "key":response.data.key_id,
+        "order_id":response.data.order.id,
+        "handler":async function(response){
+            await axios.post('http://localhost:3000/purchase/updatetransactionstatus',{
+               order_id: options.order_id,
+                payment_id: response.razorpay_payment_id,
+
+            },{ headers:{'Authentication' :token}})
+            alert('you are a premium User now')
+        },
+    };
+    const rzp1= new Razorpay(options);
+    rzp1.open();
+    e.preventDefault();
+
+    rzp1.on('payment failed',function(response){
+        console.log(response);
+        alert('Something went wrong');
+    })
+
+
+
+}
+
+
 
 document.addEventListener("DOMContentLoaded", () => {  
     const token=localStorage.getItem('token');
