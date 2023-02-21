@@ -11,8 +11,8 @@ function validatestring(string){
     }
 }
 
-function generateToken(id,name){
-  return jwt.sign({userid:id,name:name},'qweryyuioplkjhgfdsazxxcvbnm');
+function generateToken(id,name,ispremiumuser){
+  return jwt.sign({userid:id,name:name,ispremiumuser},'qweryyuioplkjhgfdsazxxcvbnm');
 }
 
 exports.login= async (req,res,next)=>{
@@ -30,7 +30,7 @@ exports.login= async (req,res,next)=>{
             else if(result===true){
             console.log(user[0].password);
             res.status(201).json({ success: true, message:"user logged successfully"
-          ,token:generateToken(user[0].id,user[0].name)})
+          ,token:generateToken(user[0].id,user[0].name,user[0].ispremiumuser)})
             }
     
             else{

@@ -1,12 +1,18 @@
 const Razorpay=require('razorpay');
+const jwt=require('jsonwebtoken');
 const Order=require('../models/orders');
 const User=require('../models/signup');
+const Usercontroller=('./login');
+
+ function generateToken(id,name,ispremiumuser){
+     return jwt.sign({userid:id,name:name,ispremiumuser},'qweryyuioplkjhgfdsazxxcvbnm');
+   }
 
 exports.purchasepremium=async (req,res)=>{
     try{
        var rzp= new Razorpay({
-        key_id: 'rzp_test_gVswpl2XSSoz2A',
-        key_secret: 'zJi1H6LTZzsjF5yrx6gPUR4b'
+        key_id: 'rzp_test_vfCLrQ9Lj1hMJn',
+        key_secret: '1FL11HFqOHvydQyAAijMW36X'
        })
         const amount=2500;
 
@@ -35,14 +41,14 @@ exports.purchasepremium=async (req,res)=>{
 exports.updatetransactionstatus= async (req,res)=>{
     try{
        const {payment_id,order_id}=req.body;
-       console.log(order_id);
+       console.log('order id>>>>>>>>>>>>>>>>>',order_id);
        const order=await Order.findOne({where: {orderid: order_id}});
     promise1= order.update({paymentid:payment_id,status:'Successful'})
     promise2=req.user.update({ispremiumuser:true})
     Promise.all([promise1,promise2]).then(()=>{
         
-     return res.status(202).json({success:true,message:"Transaction successful"})
-     }).catch(()=>{
+     return res.status(202).json({success:true,message:"Transaction successful",token:generateToken(req.user.id,req.user.name,true) })
+     }).catch((err)=>{
         console.log(err);
      })
     }
