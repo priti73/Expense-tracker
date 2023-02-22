@@ -1,4 +1,5 @@
 const Expense = require('../models/expense');
+const User=require('../models/signup');
 
 exports.postExpense=async (req,res,next)=>{
     try{
@@ -9,14 +10,21 @@ exports.postExpense=async (req,res,next)=>{
      const amount=req.body.expenseAmount;
      const description=req.body.description;
      const category=req.body.category;
-     
-      const data =await Expense.create({
+      
+       const data =await Expense.create({
          expenseAmount:amount,
          description:description,
          category: category,
          signupId:req.user.id
          
       });
+      const totalexpense=Number(req.user.totalexpense)+Number(amount);
+      User.update({
+         totalexpense:totalexpense
+      },{
+         where:{ id: req.user.id}
+      })
+
       console.log('new expense');
       res.status(201).json({newexpense:data});
     }

@@ -95,7 +95,7 @@ function showleaderboard(){
        var leaderboardelem=document.getElementById('leaderboard'); 
        leaderboardelem.innerHTML +=`<h1>Leader board</h1>`
        userleaderarray.data.forEach((userdetails) => {
-         leaderboardelem.innerHTML+=`<li>Name -${userdetails.name} TotalExpense -${userdetails.total_expense}</li>`
+         leaderboardelem.innerHTML+=`<li>Name -${userdetails.name} TotalExpense -${userdetails.totalexpense}</li>`
        });
     } 
     document.getElementById('text').appendChild(innputElement);
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => { 
 });
 
 function showUserOnScreen(user){
-    const parentNode=document.getElementById('listofusers');
+    var parentNode=document.getElementById('listofusers');
     console.log(parentNode);
     const childHTML=`<li id=${user.id}> ${user.expenseAmount} - ${user.description} - ${user.category}
     <button onclick=deleteExpense('${user.id}')> Delete Expense </button>

@@ -11,8 +11,8 @@ const Usercontroller=('./login');
 exports.purchasepremium=async (req,res)=>{
     try{
        var rzp= new Razorpay({
-        key_id: 'rzp_test_vfCLrQ9Lj1hMJn',
-        key_secret: '1FL11HFqOHvydQyAAijMW36X'
+        key_id: 'rzp_test_nflrsqQJdkR0uu',
+        key_secret: 'Ej7VYqgqdKQfO0lRGzWJ4w5C'
        })
         const amount=2500;
 
