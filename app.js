@@ -8,11 +8,13 @@ const sequelize=require('./util/database');
 const User=require('./models/signup');
 const Expense=require('./models/expense');
 const Order=require('./models/orders');
+const Forgotpassword= require('./models/forgotpassword');
 
 
 var cors =require('cors');
 
 const app = express();
+const dotenv = require('dotenv');
 
 app.use(cors());
 
@@ -41,9 +43,10 @@ app.use(passwordRoutes);
 
 User.hasMany(Expense);
 Expense.belongsTo(User);
-
 User.hasMany(Order);
 Order.belongsTo(User);
+User.hasMany(Forgotpassword);
+Forgotpassword.belongsTo(User);
 
 sequelize
 //.sync()
