@@ -1,7 +1,10 @@
 const Expense = require('../models/expense');
 const User=require('../models/signup');
+const sequelize = require('../util/database');
 
 exports.postExpense=async (req,res,next)=>{
+   
+   const t= await sequelize.transaction();
     try{
  
        if(!req.body.expenseAmount || !req.body.description || !req.body.category){
@@ -17,18 +20,22 @@ exports.postExpense=async (req,res,next)=>{
          category: category,
          signupId:req.user.id
          
-      });
-      const totalexpense=Number(req.user.totalexpense)+Number(amount);
-      User.update({
-         totalexpense:totalexpense
-      },{
-         where:{ id: req.user.id}
-      })
-
-      console.log('new expense');
-      res.status(201).json({newexpense:data});
-    }
+      },{transaction :t})
+         const totalexpense=Number(req.user.totalexpense)+Number(amount);
+        await User.update({
+            totalexpense:totalexpense
+         },{
+            where:{ id: req.user.id},
+            transaction :t
+         })
+         await t.commit();
+         console.log('new expense');
+         res.status(201).json({newexpense:data});
+       
+      }
+      
     catch(err){
+      await t.rollback();
        res.status(500).json({
           error: err
        })
@@ -51,18 +58,36 @@ exports.getAllExpense = async (req, res, next) => {
 }
 
 exports.deleteExpense = async (req, res, next) => {
+   const t= await sequelize.transaction();
    try{
         const expenseid=req.params.id;
-        await Expense.destroy({where: {id: expenseid}});
-        console.log('delete user');
-        res.status(201).json({deleteexpenseid:expenseid});
+        const expense=await Expense.findByPk(expenseid);
+        console.log(expense.signupId);
+        const user=await User.findByPk(expense.signupId);
+        console.log(user.email);
+        console.log(user.totalexpense);
+        const totalexpense=(user.totalexpense)-(expense.expenseAmount);
+        console.log(expense.expenseAmount);
+        console.log(totalexpense);
+        await User.update({
+            totalexpense:totalexpense
+         },{
+            where:{ id: expense.signupId},
+            transaction :t
+         })
+          await t.commit();
+         console.log('delete user');
+         await Expense.destroy({where: {id: expenseid}});
+         res.status(201).json({deleteexpenseid:expenseid});
       }
    
-   catch(err){
-      res.status(500).json({
-         error: err
-   })
- }
+      catch(err){
+         await t.rollback();
+         console.log(err);
+          res.status(500).json({
+             error: err
+          })
+       }
 }
 
 exports.getoneExpense = async (req, res, next) => {
