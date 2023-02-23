@@ -23,7 +23,8 @@ const usersrouteRoutes = require('./routes/signup');
 const loginRoutes = require('./routes/login');
 const expenseRoutes=require('./routes/expense');
 const purchaseRoutes=require('./routes/purchase');
-const premiumController=require('./routes/premium');
+const premiumRoutes=require('./routes/premium');
+const passwordRoutes=require('./routes/password');
 
 
 app.use(bodyParser.json({ extended: false }));
@@ -34,7 +35,8 @@ app.use(usersrouteRoutes);
 app.use(loginRoutes);
 app.use(expenseRoutes);
 app.use(purchaseRoutes);
-app.use(premiumController);
+app.use(premiumRoutes);
+app.use(passwordRoutes);
 //app.use(errorController.get404);
 
 User.hasMany(Expense);

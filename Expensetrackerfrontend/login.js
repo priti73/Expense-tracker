@@ -24,3 +24,13 @@ const password=document.querySelector('#password');
          document.body.innerHTML=`<div style="color:red;">${err.message} <div>`
     }
 }
+
+document.getElementById('reset-button').onclick=async function(e){
+    try{
+        window.location.href="./resetform.html"
+    }
+    catch(err){
+        console.log(err);
+
+    }
+}
