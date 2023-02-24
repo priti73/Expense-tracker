@@ -3,9 +3,10 @@ const description=document.querySelector('#description');
 const expenseAmount=document.querySelector('#amount');
 const category=document.querySelector('#category');
 const msg=document.querySelector('.msg');
-myForm.addEventListener('submit', onSubmit);
+//myForm.addEventListener('submit', onSubmit);
 //const Razorpay=require('razorpay');
-function onSubmit(e){
+
+document.getElementById('submit').onclick=async function(e){
     e.preventDefault();
     if(expenseAmount==='' ||description===''||  category===''){
         msg.classList.add('error');
@@ -18,21 +19,20 @@ function onSubmit(e){
             expenseAmount:expenseAmount.value,
             category:category.value
         }
-        const token=localStorage.getItem('token');
-        axios.post("http://localhost:3000/expense/add-expense",obj,{headers: {'Authentication' :token}})
-        .then((response) =>{
+         const token=localStorage.getItem('token');
+         const response=await axios.post("http://localhost:3000/expense/add-expense",obj,{headers: {'Authentication' :token}})
+        
           showUserOnScreen(response.data.newexpense)
           localStorage.setItem(response.data.newexpense.id,JSON.stringify(obj));
           console.log(response.status);
-        })
-        .catch((err) =>{
-        console.log(err);
-        })
+        
+        
+        }
         expenseAmount.value='';
         description.value='';
         category.value='';
            }
-}
+
 
 document.getElementById('rzp-button').onclick=async function(e){
     const token=localStorage.getItem('token');
@@ -80,8 +80,47 @@ function parseJwt (token) {
  function showpremiumusermessage(){
     document.getElementById('text').innerHTML='You are a premium user now';
     document.getElementById('rzp-button').style.visibility='hidden'; 
-       
+    const div = document.createElement('div');
+    div.id = 'test';   
+    div.innerHTML=`<label for="income">Income:</label>
+                  <input type="text" id="income">`;
+    document.getElementById('desc').appendChild(div);  
+    const dailybutton=document.createElement('button');
+    dailybutton.id='day';
+    dailybutton.textContent="dailyexpense";
+    document.getElementById('my-form').appendChild(dailybutton);
+
+    const weaklybutton=document.createElement('button');
+    weaklybutton.id='daily';
+    weaklybutton.textContent="weaklyexpense";
+    document.getElementById('my-form').appendChild(weaklybutton);
+
+    const monthlybutton=document.createElement('button');
+    monthlybutton.id='month';
+    monthlybutton.textContent="monthlyexpense";
+    document.getElementById('my-form').appendChild(monthlybutton);
  }
+
+ function download(){
+    const token=localStorage.getItem('token');
+    axios.get('http://localhost:3000/user/download', { headers: {"Authorization" : token} })
+    .then((response) => {
+        if(response.status === 201){
+            //the bcakend is essentially sending a download link
+            //  which if we open in browser, the file would download
+            var a = document.createElement("a");
+            a.href = response.data.fileUrl;
+            a.download = 'myexpense.csv';
+            a.click();
+        } else {
+            throw new Error(response.data.message)
+        }
+
+    })
+    .catch((err) => {
+        showError(err)
+    });
+}
 
 function showleaderboard(){
     const innputElement=document.createElement('input');
