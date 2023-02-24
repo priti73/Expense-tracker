@@ -8,7 +8,8 @@ const forgotpassword=sequelize.define('forgotpassword',{
     allowNull: false,
     primaryKey: true
   },
-  active: Sequelize.BOOLEAN
+  active: Sequelize.BOOLEAN,
+  signupId:Sequelize.INTEGER
 });
 
 module.exports =forgotpassword;
