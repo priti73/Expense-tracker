@@ -103,13 +103,13 @@ function parseJwt (token) {
 
  function download(){
     const token=localStorage.getItem('token');
-    axios.get('http://localhost:3000/user/download', { headers: {"Authorization" : token} })
+    axios.get('http://localhost:3000/expense/download', { headers: {"Authentication" : token} })
     .then((response) => {
-        if(response.status === 201){
+        if(response.status === 200){
             //the bcakend is essentially sending a download link
             //  which if we open in browser, the file would download
             var a = document.createElement("a");
-            a.href = response.data.fileUrl;
+            a.href = response.data.fileurl;
             a.download = 'myexpense.csv';
             a.click();
         } else {

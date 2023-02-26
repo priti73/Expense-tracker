@@ -9,12 +9,13 @@ const User=require('./models/signup');
 const Expense=require('./models/expense');
 const Order=require('./models/orders');
 const Forgotpassword= require('./models/forgotpassword');
+const downloadedexpense=require('./models/downloadedexpense');
 
 
 var cors =require('cors');
 
 const app = express();
-const dotenv = require('dotenv');
+
 
 app.use(cors());
 
@@ -47,10 +48,13 @@ User.hasMany(Order);
 Order.belongsTo(User);
 User.hasMany(Forgotpassword);
 Forgotpassword.belongsTo(User);
+User.hasMany(downloadedexpense);
+downloadedexpense.belongsTo(User);
+
 
 sequelize
-.sync()
-//.sync({force: true})
+// .sync()
+ .sync({force: true})
 .then(result=>{
    app.listen(3000);
 })

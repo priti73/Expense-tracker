@@ -1,6 +1,11 @@
 const Expense = require('../models/expense');
 const User=require('../models/signup');
 const sequelize = require('../util/database');
+const Downloadedexpense=require('../models/downloadedexpense');
+const { DATE } = require('sequelize');
+const Userservices=require('../services/userservices');
+const S3services=require('../services/S3services');
+
 
 exports.postExpense=async (req,res,next)=>{
    
@@ -103,4 +108,32 @@ exports.getoneExpense = async (req, res, next) => {
          error: err
    })
  }
+}
+
+
+exports.downloadfile=async (req,res)=>{
+   try{
+       
+   const ispremiumuser=req.user.ispremiumuser;
+   const expense=await Userservices.getExpenses(req);
+  if(ispremiumuser){
+   const stringifiedExpense=JSON.stringify(expense);
+   console.log(stringifiedExpense);
+      const filename=`Expense${req.user.id}/${new DATE()}.txt`;
+      const fileurl= await S3services.uploadToS3(stringifiedExpense,filename);
+     const file=await Downloadedexpense.create({
+         signupId:req.user.id,
+         fileurl:fileurl
+      })
+      res.status(200).json({fileurl,success:true})
+  }
+  else{
+     res.status(404).json({message:'you are not a premium user'})
+  }
+   
+  }
+   catch(err){
+           console.log(err);
+           res.status(500).json(err);
+   }
 }

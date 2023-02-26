@@ -12,6 +12,8 @@ const router = express.Router();
  router.delete('/expense/delete-expense/:id',expenseController.deleteExpense);
  
  router.get('/expense/get-expense/:id',expenseController.getoneExpense);
+ 
+router.get('/expense/download',auntheticateController.authenticate,expenseController.downloadfile);
 
 
 module.exports = router;
