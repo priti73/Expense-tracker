@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Making an Expense tracker app</title>
-    <link rel="stylesheet" href="style.css">  
+   <link rel="stylesheet" href="style.css"> 
   </head>
   <body>
     <header>
@@ -30,22 +30,33 @@
               <option value="food">food</option>
               <option value="vehicle">vehicle</option>
               <option value="cloth">cloth</option>
-              <option value="Petrol">Petrol</option>
+              <option value="Petrol">Travel</option>
             </select>
           </div>
         <input class="btn" type="submit" value="Add Expense" id="submit">
       </form>
+    </section> 
     <div id="text" ></div>  
     <button id="rzp-button">Buy Premium</button>
     <button onclick="download()" id="downloadexpense">Download File</button>
     
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <h4>Expense list</h4>
-    <ul id='listofusers'></ul>
-    </section> 
-    <ul id='leaderboard'></ul>
 
-    <script src="expense.js">
+    <center><h2>Expense List</h2>
+    <ul id="listOfExpense"></ul>
+    <div class="text-center"  id="pagination"></div>
+      <div class="text-right">
+        <select
+         id="select" class="form-select" aria-label="Default select example">
+         <option  id="noOfPages" selected> Select no. of data</option>
+         <option value ='2'>2</option>
+         <option value ='5'>5</option>
+         <option value ='10'>10</option>
+         </select>
+      </div>  
+    <ul id='leaderboard'></ul></center>
+   
+     <script src="expense.js">
       </script> 
       <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.4.1/axios.min.js">
       </script>

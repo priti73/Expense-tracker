@@ -1,7 +1,12 @@
 const path = require('path');
+const fs=require('fs');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const helmet = require("helmet");
+//const compresion=require("compression");
+const morgan=require("morgan");
+
 
 //const errorController = require('./controllers/error');
 const sequelize=require('./util/database');
@@ -16,8 +21,8 @@ var cors =require('cors');
 
 const app = express();
 
-
 app.use(cors());
+
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -28,6 +33,15 @@ const expenseRoutes=require('./routes/expense');
 const purchaseRoutes=require('./routes/purchase');
 const premiumRoutes=require('./routes/premium');
 const passwordRoutes=require('./routes/password');
+
+const accessLogStream=fs.createWriteStream(
+    path.join(__dirname,'access.log'),{flags: 'a'}
+);
+
+app.use(helmet());
+//app.use(compresion());
+app.use(morgan('combined',{stream:accessLogStream}));
+
 
 
 app.use(bodyParser.json({ extended: false }));
@@ -53,10 +67,10 @@ downloadedexpense.belongsTo(User);
 
 
 sequelize
-// .sync()
- .sync({force: true})
+.sync()
+//.sync({force: true})
 .then(result=>{
-   app.listen(3000);
+   app.listen(process.env.PORT|| 3000);
 })
 .catch(err=>{
     console.log(err);

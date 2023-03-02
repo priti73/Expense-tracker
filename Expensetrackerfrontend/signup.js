@@ -23,5 +23,6 @@ const password=document.querySelector('#password');
     }
         }catch(err){
          console.log(err);
+         document.body.innerHTML=`<div style="color:red;">${err.message} <div>`
     }
 }

@@ -3,8 +3,6 @@ const description=document.querySelector('#description');
 const expenseAmount=document.querySelector('#amount');
 const category=document.querySelector('#category');
 const msg=document.querySelector('.msg');
-//myForm.addEventListener('submit', onSubmit);
-//const Razorpay=require('razorpay');
 
 document.getElementById('submit').onclick=async function(e){
     e.preventDefault();
@@ -80,7 +78,7 @@ function parseJwt (token) {
  function showpremiumusermessage(){
     document.getElementById('text').innerHTML='You are a premium user now';
     document.getElementById('rzp-button').style.visibility='hidden'; 
-    const div = document.createElement('div');
+    /*const div = document.createElement('div');
     div.id = 'test';   
     div.innerHTML=`<label for="income">Income:</label>
                   <input type="text" id="income">`;
@@ -98,7 +96,7 @@ function parseJwt (token) {
     const monthlybutton=document.createElement('button');
     monthlybutton.id='month';
     monthlybutton.textContent="monthlyexpense";
-    document.getElementById('my-form').appendChild(monthlybutton);
+    document.getElementById('my-form').appendChild(monthlybutton);*/
  }
 
  function download(){
@@ -119,6 +117,7 @@ function parseJwt (token) {
     })
     .catch((err) => {
         showError(err)
+        document.body.innerHTML=`<div style="color:red;">${'You have to buy premium subscription'} <div>`
     });
 }
 
@@ -130,48 +129,167 @@ function showleaderboard(){
     const token=localStorage.getItem('token');
     console.log(token);
        const userleaderarray=await axios.get('http://localhost:3000/premium/leaderboard',{headers: {'Authentication' :token}})
-       console.log(userleaderarray);
        var leaderboardelem=document.getElementById('leaderboard'); 
        leaderboardelem.innerHTML +=`<h1>Leader board</h1>`
        userleaderarray.data.forEach((userdetails) => {
-         leaderboardelem.innerHTML+=`<li>Name -${userdetails.name} TotalExpense -${userdetails.totalexpense}</li>`
+       leaderboardelem.innerHTML+=`<li>Name -${userdetails.name} TotalExpense -${userdetails.totalexpense}</li>`
        });
     } 
     document.getElementById('text').appendChild(innputElement);
     
 }
 
+/*window.addEventListener("DOMContentLoaded",getExpenses);
+
+async function getExpenses(){
+    try{
+        const parentNode=document.getElementById('listOfExpense');
+        parentNode.innerHTML="";
+        const token=localStorage.getItem("token");
+       const num= document.getElementById('noOfPages');
+       console.log("num",num.value);
+        const LIMIT=2;
+        const PAGE=1;
+
+        const decodetoken=parseJwt(token);
+        console.log(decodetoken);
+        const ispremiumuser=decodetoken.ispremiumuser;
+        if(ispremiumuser){
+            showpremiumusermessage();
+            showleaderboard();
+        }
+        const response=await axios.get(`http://localhost:3000/expense/get-expense?page=${PAGE}&limit=${LIMIT}`,
+        {headers: {'Authentication' :token}});
+        response.data.expense.forEach((expense)=>{
+            showUserOnScreen(expense);
+        })
+      // createPagination(response.data.pages);
+        
+    }
+    catch(err){
+      console.log(err);
+    }
+}
+
+function createPagination(pages){
+    document.getElementById('pagination').innerHTML="";
+    let childHTML="";
+    for( var i=1;i<=pages;i++){
+        childHTML+=`<a class= "mx-2" id= "page=${i}" >${i}</a>`;
+
+    }
+    const parentNode=document.getElementById('pagination');
+    parentNode.innerHTML+=childHTML;
+}
+
+document.querySelector('pagination').addEventListener("click",getExpenses);
+
+async function getexpensepage(e){
+    const parentNode=document.getElementById("listOfExpense");
+    parentNode.innerHTML="";
+    const token=localStorage.getItem("token");
+    try{
+        let response=await axios.get(`http://localhost:3000/expense/get-expense${e.target.id}`,{headers: {'Authentication' :token}})
+        for(var i=0;i<response.data.expenses.length;i++){
+                 showUserOnScreen(response.data.expenses[i])
+             }
+             
+       //createPagination(response.data.pages);
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+  
+document.getElementById('select').addEventListener("change",(e)=>{
+    localStorage.setItem("select",e.target.value);
+    getExpenses();
+})
+*/
 document.addEventListener("DOMContentLoaded", () => {  
     const token=localStorage.getItem('token');
     const decodetoken=parseJwt(token);
-    console.log(decodetoken);
     const name=decodetoken.name;
     const ispremiumuser=decodetoken.ispremiumuser;
-    console.log(name);
     if(ispremiumuser){
         showpremiumusermessage();
         showleaderboard();
         }
-    axios.get("http://localhost:3000/expense/get-expense",{headers: {'Authentication' :token}})
+    const page=1;
+    axios.get(`http://localhost:3000/expense/get-expense?page=${page}`,{headers: {'Authentication' :token}})
    .then((response)  =>{
-     console.log(response);
-     for(var i=0;i<response.data.allexpenses.length;i++){
-        showUserOnScreen(response.data.allexpenses[i])
+     console.log(response.data.expenses);
+     for(var i=0;i<response.data.expenses.length;i++){
+        showUserOnScreen(response.data.expenses[i])
      }
+    //showexpense(response.data.expenses);
+    //showPagination(response.data)
+    console.log("pagedata",response.data);
+
    } )
    .catch((err)=>{
     console.log(err);
+    document.body.innerHTML=`<div style="color:red;">${err.message} <div>`
    })
 });
+/*
+function showPagination({
+    currentPage,
+    hasNextPage,
+    nextPage,
+    hasPreviousPage,
+    previousPage,
+    lastPage,
+}){
+    pagination.innerHTML='';
+    if(hasPreviousPage){
+        const btn2=document.createElement('button')
+        btn2.innerHTML=previousPage
+        btn2.addEventListener('click',()=>getExpenses(previousPage))
+        pagination.appendChild(btn2)
+    }
 
+    const btn1=document.createElement('button')
+    btn1.innerHTML=`<h3>${currentPage}</h3>`
+    btn1.addEventListener('click',()=>getExpenses(currentPage))
+    pagination.appendChild(btn1)
+
+    if(hasNextPage){
+        const btn3=document.createElement('button')
+        btn3.innerHTML=nextPage
+        btn3.addEventListener('click',()=>getExpenses(nextPage))
+        pagination.appendChild(btn3)
+    }
+}
+
+function getExpenses(page){
+    const token=localStorage.getItem('token');
+    const response=axios.get(`http://localhost:3000/expense/get-expense?page=${page}`,{headers: {'Authentication' :token}})
+    .then((response)  =>{
+        console.log(response);
+        // for(var i=0;i<response.data.expenses.length;i++){
+        //    showUserOnScreen(response.data.expenses[i])
+        // }
+        
+       
+    showexpense(response.data.expenses);
+    showPagination(response.data)
+    })
+    .catch((err)=>
+        console.log(err)
+    );
+}
+
+*/
 function showUserOnScreen(user){
-    var parentNode=document.getElementById('listofusers');
-    console.log(parentNode);
+    var parentNode=document.getElementById('listOfExpense');
+    console.log('parentnode',parentNode);
     const childHTML=`<li id=${user.id}> ${user.expenseAmount} - ${user.description} - ${user.category}
     <button onclick=deleteExpense('${user.id}')> Delete Expense </button>
     <button onclick=EditExpense('${user.id}')> Edit Expense </button>
     </li>`
     parentNode.innerHTML=parentNode.innerHTML+childHTML;
+   // parentNode.appendChild(childHTML);
 }
 
 function deleteExpense(userid){
@@ -182,11 +300,12 @@ function deleteExpense(userid){
                  })
               .catch((err) =>{
               console.log(err);
+              document.body.innerHTML=`<div style="color:red;">${err.message} <div>`
               })
         }
 
 function removeUserFromScreen(userid){
-    const parentNode=document.getElementById('listofusers');
+    const parentNode=document.getElementById('listOfExpense');
     const childToBeDeleted=document.getElementById(userid);
     if(childToBeDeleted){
         parentNode.removeChild(childToBeDeleted)
@@ -204,5 +323,7 @@ function EditExpense(userid){
       })
    .catch((err) =>{
    console.log(err);
+   document.body.innerHTML=`<div style="color:red;">${err.message} <div>`
    })
 }
+

@@ -31,6 +31,6 @@ document.getElementById('reset-button').onclick=async function(e){
     }
     catch(err){
         console.log(err);
-
+        document.body.innerHTML=`<div style="color:red;">${err.message} <div>`
     }
 }

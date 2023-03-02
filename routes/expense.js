@@ -15,5 +15,5 @@ const router = express.Router();
  
 router.get('/expense/download',auntheticateController.authenticate,expenseController.downloadfile);
 
-
+//router.get('/expense/get-expense',expenseController.getexpenses);
 module.exports = router;

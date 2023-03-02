@@ -19,16 +19,29 @@
   },
   "homepage": "https://github.com/priti73/Sharpnercode#readme",
   "devDependencies": {
+    "node-env-run": "^4.0.2",
     "nodemon": "^2.0.20"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
+    "@sendinblue/client": "^3.2.2",
+    "add": "^2.0.6",
+    "aws-sdk": "^2.1323.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
+    "compression": "^1.7.4",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
+    "helmet": "^6.0.1",
     "jsonwebtoken": "^9.0.0",
+    "morgan": "^1.10.0",
     "mysql2": "^3.1.2",
-    "sequelize": "^6.28.0"
+    "process-env": "^2.0.2",
+    "razorpay": "^2.8.4",
+    "sequelize": "^6.28.0",
+    "sib-api-v3-sdk": "^8.5.0",
+    "uuid": "^9.0.0"
   }
 }

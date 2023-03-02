@@ -5,7 +5,7 @@ const User=require('../models/signup');
 const Usercontroller=('./login');
 
  function generateToken(id,name,ispremiumuser){
-     return jwt.sign({userid:id,name:name,ispremiumuser},'qweryyuioplkjhgfdsazxxcvbnm');
+     return jwt.sign({userid:id,name:name,ispremiumuser},process.env.JWT_SECRET_KEY);
    }
 
 exports.purchasepremium=async (req,res)=>{
@@ -41,7 +41,6 @@ exports.purchasepremium=async (req,res)=>{
 exports.updatetransactionstatus= async (req,res)=>{
     try{
        const {payment_id,order_id}=req.body;
-       console.log('order id>>>>>>>>>>>>>>>>>',order_id);
        const order=await Order.findOne({where: {orderid: order_id}});
     promise1= order.update({paymentid:payment_id,status:'Successful'})
     promise2=req.user.update({ispremiumuser:true})

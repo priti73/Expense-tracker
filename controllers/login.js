@@ -12,7 +12,7 @@ function validatestring(string){
 }
 
 function generateToken(id,name,ispremiumuser){
-  return jwt.sign({userid:id,name:name,ispremiumuser},'qweryyuioplkjhgfdsazxxcvbnm');
+  return jwt.sign({userid:id,name:name,ispremiumuser},process.env.JWT_SECRET_KEY);
 }
 
 exports.login= async (req,res,next)=>{
