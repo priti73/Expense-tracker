@@ -3,9 +3,9 @@ const fs=require('fs');
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const helmet = require("helmet");
+//const helmet = require("helmet");
 //const compresion=require("compression");
-const morgan=require("morgan");
+//const morgan=require("morgan");
 
 
 //const errorController = require('./controllers/error');
@@ -34,13 +34,13 @@ const purchaseRoutes=require('./routes/purchase');
 const premiumRoutes=require('./routes/premium');
 const passwordRoutes=require('./routes/password');
 
-const accessLogStream=fs.createWriteStream(
-    path.join(__dirname,'access.log'),{flags: 'a'}
-);
+// const accessLogStream=fs.createWriteStream(
+//     path.join(__dirname,'access.log'),{flags: 'a'}
+// );
 
-app.use(helmet());
-//app.use(compresion());
-app.use(morgan('combined',{stream:accessLogStream}));
+// app.use(helmet());
+// app.use(compresion());
+// app.use(morgan('combined',{stream:accessLogStream}));
 
 
 
