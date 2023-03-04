@@ -18,7 +18,7 @@ document.getElementById('submit').onclick=async function(e){
             category:category.value
         }
          const token=localStorage.getItem('token');
-         const response=await axios.post("http://localhost:3000/expense/add-expense",obj,{headers: {'Authentication' :token}})
+         const response=await axios.post("http://54.238.228.126:3000/expense/add-expense",obj,{headers: {'Authentication' :token}})
         
           showUserOnScreen(response.data.newexpense)
           localStorage.setItem(response.data.newexpense.id,JSON.stringify(obj));
@@ -34,14 +34,14 @@ document.getElementById('submit').onclick=async function(e){
 
 document.getElementById('rzp-button').onclick=async function(e){
     const token=localStorage.getItem('token');
-    const response=await axios.get('http://localhost:3000/purchase/purchasepremium',{headers: {'Authentication' :token}})
+    const response=await axios.get('http://54.238.228.126:3000/purchase/purchasepremium',{headers: {'Authentication' :token}})
     console.log(response.data.key_id);
     console.log(response.data.order.id);
     var options={
         "key":response.data.key_id,
         "order_id":response.data.order.id,
         "handler":async function(response){
-           const res= await axios.post('http://localhost:3000/purchase/updatetransactionstatus',{
+           const res= await axios.post('http://54.238.228.126:3000/purchase/updatetransactionstatus',{
                order_id: options.order_id,
                 payment_id: response.razorpay_payment_id,
             },{ headers:{'Authentication' :token}})
@@ -101,7 +101,7 @@ function parseJwt (token) {
 
  function download(){
     const token=localStorage.getItem('token');
-    axios.get('http://localhost:3000/expense/download', { headers: {"Authentication" : token} })
+    axios.get('http://54.238.228.126:3000/expense/download', { headers: {"Authentication" : token} })
     .then((response) => {
         if(response.status === 200){
             //the bcakend is essentially sending a download link
@@ -128,7 +128,7 @@ function showleaderboard(){
     innputElement.onclick=async()=>{
     const token=localStorage.getItem('token');
     console.log(token);
-       const userleaderarray=await axios.get('http://localhost:3000/premium/leaderboard',{headers: {'Authentication' :token}})
+       const userleaderarray=await axios.get('http://54.238.228.126:3000/premium/leaderboard',{headers: {'Authentication' :token}})
        var leaderboardelem=document.getElementById('leaderboard'); 
        leaderboardelem.innerHTML +=`<h1>Leader board</h1>`
        userleaderarray.data.forEach((userdetails) => {
@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => { 
         showleaderboard();
         }
     const page=1;
-    axios.get(`http://localhost:3000/expense/get-expense?page=${page}`,{headers: {'Authentication' :token}})
+    axios.get(`http://54.238.228.126:3000/expense/get-expense?page=${page}`,{headers: {'Authentication' :token}})
    .then((response)  =>{
      console.log(response.data.expenses);
      for(var i=0;i<response.data.expenses.length;i++){
@@ -293,7 +293,7 @@ function showUserOnScreen(user){
 }
 
 function deleteExpense(userid){
-          axios.delete(`http://localhost:3000/expense/delete-expense/${userid}`)
+          axios.delete(`http://54.238.228.126:3000/expense/delete-expense/${userid}`)
               .then((response) =>{
                removeUserFromScreen(userid)
                localStorage.removeItem(userid);
@@ -313,7 +313,7 @@ function removeUserFromScreen(userid){
 }
 
 function EditExpense(userid){
-    axios.get(`http://localhost:3000/expense/get-expense/${userid}`)
+    axios.get(`http://54.238.228.126:3000/expense/get-expense/${userid}`)
    .then((response) =>{
     console.log(response.data.editexpenseid);
     document.getElementById('amount').value=response.data.editexpenseid.expenseAmount;

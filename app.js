@@ -48,6 +48,7 @@ app.use(bodyParser.json({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+
 app.use(usersrouteRoutes);
 app.use(loginRoutes);
 app.use(expenseRoutes);
@@ -55,6 +56,11 @@ app.use(purchaseRoutes);
 app.use(premiumRoutes);
 app.use(passwordRoutes);
 //app.use(errorController.get404);
+
+app.use((req,res)=>{
+console.log('url',req.url);
+res.sendFile(path.join(__dirname,`public/${req.url}`))
+})
 
 User.hasMany(Expense);
 Expense.belongsTo(User);
