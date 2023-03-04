@@ -59,7 +59,7 @@ app.use(passwordRoutes);
 
 app.use((req,res)=>{
 console.log('url',req.url);
-res.sendFile(path.join(__dirname,`public/${req.url}`))
+res.sendFile(path.join(__dirname,`Expensetrackerfrontend/${req.url}`))
 })
 
 User.hasMany(Expense);
