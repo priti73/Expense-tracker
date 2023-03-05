@@ -60,7 +60,6 @@ exports.postForgotPassword = async(req, res, next) => {
         res.status(200).json({status : 200, message : "check your mailbox for reset link"});
     }
     catch(err) {
-        console.log(err);
         res.status(409).json({message : "failed changing password"})
     }
  }
