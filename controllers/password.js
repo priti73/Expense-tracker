@@ -51,7 +51,7 @@ exports.postForgotPassword = async(req, res, next) => {
             subject : 'Password reset link',
             textContent : 'hey  here to reset your password',
             htmlContent : `<h1>Your password reset link<h1>
-            <a href="http://localhost:3000/password/resetpassword/{{params.requestId}}">click here to reset your password</a>`,
+            <a href="http://54.238.228.126:3000/password/resetpassword/{{params.requestId}}">click here to reset your password</a>`,
             params : {
                 requestId : requestId
             }
