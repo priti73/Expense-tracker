@@ -7,7 +7,7 @@ const auntheticateController=require('../middleware/auth');
 const router = express.Router();
 
  router.post('/expense/add-expense', auntheticateController.authenticate,expenseController.postExpense);
- router.get('/expense/get-expense',auntheticateController.authenticate,expenseController.getAllExpense);
+ router.get('/expense/get-expense',auntheticateController.authenticate,expenseController.getExpenses);
 
  router.delete('/expense/delete-expense/:id',expenseController.deleteExpense);
  
@@ -15,5 +15,4 @@ const router = express.Router();
  
 router.get('/expense/download',auntheticateController.authenticate,expenseController.downloadfile);
 
-//router.get('/expense/get-expense',expenseController.getexpenses);
 module.exports = router;

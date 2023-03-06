@@ -10,7 +10,7 @@ const password=document.querySelector('#password');
           }
       
     console.log(logindetails);
-    const response= await axios.post("http://54.238.228.126:3000/users/login",
+    const response= await axios.post("http://localhost:3000/users/login",
     logindetails)
     if(response.status==201){
         //alert(response.data.message)

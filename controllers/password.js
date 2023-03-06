@@ -5,7 +5,7 @@ const User = require('../models/signup');
 const bcrypt = require('bcrypt');
 
 const Password = require('../models/forgotpassword');
-let requestId;
+
 let recepientEmail;
 exports.postForgotPassword = async(req, res, next) => {
     try {

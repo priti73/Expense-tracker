@@ -6,6 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Making an Expense tracker app</title>
    <link rel="stylesheet" href="style.css"> 
+    <form >
+      <label for="perpage">Rows per page</label>
+      <input type="text" id="perpage" placeholder="Number">        
+ </form>
+ <br>
+
   </head>
   <body>
     <header>
@@ -44,16 +50,8 @@
 
     <center><h2>Expense List</h2>
     <ul id="listOfExpense"></ul>
-    <div class="text-center"  id="pagination"></div>
-      <div class="text-right">
-        <select
-         id="select" class="form-select" aria-label="Default select example">
-         <option  id="noOfPages" selected> Select no. of data</option>
-         <option value ='2'>2</option>
-         <option value ='5'>5</option>
-         <option value ='10'>10</option>
-         </select>
-      </div>  
+    <section class="pagination">
+    </section> 
     <ul id='leaderboard'></ul></center>
    
      <script src="expense.js">

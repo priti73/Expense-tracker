@@ -3,6 +3,11 @@ const description=document.querySelector('#description');
 const expenseAmount=document.querySelector('#amount');
 const category=document.querySelector('#category');
 const msg=document.querySelector('.msg');
+const pages=document.querySelector('.pagination');
+const perpage=document.getElementById('perpage');
+var expenseList=document.getElementById("listOfExpense");
+
+
 
 document.getElementById('submit').onclick=async function(e){
     e.preventDefault();
@@ -18,7 +23,7 @@ document.getElementById('submit').onclick=async function(e){
             category:category.value
         }
          const token=localStorage.getItem('token');
-         const response=await axios.post("http://54.238.228.126:3000/expense/add-expense",obj,{headers: {'Authentication' :token}})
+         const response=await axios.post("http://localhost:3000/expense/add-expense",obj,{headers: {'Authentication' :token}})
         
           showUserOnScreen(response.data.newexpense)
           localStorage.setItem(response.data.newexpense.id,JSON.stringify(obj));
@@ -34,14 +39,14 @@ document.getElementById('submit').onclick=async function(e){
 
 document.getElementById('rzp-button').onclick=async function(e){
     const token=localStorage.getItem('token');
-    const response=await axios.get('http://54.238.228.126:3000/purchase/purchasepremium',{headers: {'Authentication' :token}})
+    const response=await axios.get('http://localhost:3000/purchase/purchasepremium',{headers: {'Authentication' :token}})
     console.log(response.data.key_id);
     console.log(response.data.order.id);
     var options={
         "key":response.data.key_id,
         "order_id":response.data.order.id,
         "handler":async function(response){
-           const res= await axios.post('http://54.238.228.126:3000/purchase/updatetransactionstatus',{
+           const res= await axios.post('http://localhost:3000/purchase/updatetransactionstatus',{
                order_id: options.order_id,
                 payment_id: response.razorpay_payment_id,
             },{ headers:{'Authentication' :token}})
@@ -101,7 +106,7 @@ function parseJwt (token) {
 
  function download(){
     const token=localStorage.getItem('token');
-    axios.get('http://54.238.228.126:3000/expense/download', { headers: {"Authentication" : token} })
+    axios.get('http://localhost:3000/expense/download', { headers: {"Authentication" : token} })
     .then((response) => {
         if(response.status === 200){
             //the bcakend is essentially sending a download link
@@ -128,7 +133,7 @@ function showleaderboard(){
     innputElement.onclick=async()=>{
     const token=localStorage.getItem('token');
     console.log(token);
-       const userleaderarray=await axios.get('http://54.238.228.126:3000/premium/leaderboard',{headers: {'Authentication' :token}})
+       const userleaderarray=await axios.get('http://localhost:3000/premium/leaderboard',{headers: {'Authentication' :token}})
        var leaderboardelem=document.getElementById('leaderboard'); 
        leaderboardelem.innerHTML +=`<h1>Leader board</h1>`
        userleaderarray.data.forEach((userdetails) => {
@@ -138,149 +143,6 @@ function showleaderboard(){
     document.getElementById('text').appendChild(innputElement);
     
 }
-
-/*window.addEventListener("DOMContentLoaded",getExpenses);
-
-async function getExpenses(){
-    try{
-        const parentNode=document.getElementById('listOfExpense');
-        parentNode.innerHTML="";
-        const token=localStorage.getItem("token");
-       const num= document.getElementById('noOfPages');
-       console.log("num",num.value);
-        const LIMIT=2;
-        const PAGE=1;
-
-        const decodetoken=parseJwt(token);
-        console.log(decodetoken);
-        const ispremiumuser=decodetoken.ispremiumuser;
-        if(ispremiumuser){
-            showpremiumusermessage();
-            showleaderboard();
-        }
-        const response=await axios.get(`http://localhost:3000/expense/get-expense?page=${PAGE}&limit=${LIMIT}`,
-        {headers: {'Authentication' :token}});
-        response.data.expense.forEach((expense)=>{
-            showUserOnScreen(expense);
-        })
-      // createPagination(response.data.pages);
-        
-    }
-    catch(err){
-      console.log(err);
-    }
-}
-
-function createPagination(pages){
-    document.getElementById('pagination').innerHTML="";
-    let childHTML="";
-    for( var i=1;i<=pages;i++){
-        childHTML+=`<a class= "mx-2" id= "page=${i}" >${i}</a>`;
-
-    }
-    const parentNode=document.getElementById('pagination');
-    parentNode.innerHTML+=childHTML;
-}
-
-document.querySelector('pagination').addEventListener("click",getExpenses);
-
-async function getexpensepage(e){
-    const parentNode=document.getElementById("listOfExpense");
-    parentNode.innerHTML="";
-    const token=localStorage.getItem("token");
-    try{
-        let response=await axios.get(`http://localhost:3000/expense/get-expense${e.target.id}`,{headers: {'Authentication' :token}})
-        for(var i=0;i<response.data.expenses.length;i++){
-                 showUserOnScreen(response.data.expenses[i])
-             }
-             
-       //createPagination(response.data.pages);
-    }
-    catch(err){
-        console.log(err);
-    }
-}
-  
-document.getElementById('select').addEventListener("change",(e)=>{
-    localStorage.setItem("select",e.target.value);
-    getExpenses();
-})
-*/
-document.addEventListener("DOMContentLoaded", () => {  
-    const token=localStorage.getItem('token');
-    const decodetoken=parseJwt(token);
-    const name=decodetoken.name;
-    const ispremiumuser=decodetoken.ispremiumuser;
-    if(ispremiumuser){
-        showpremiumusermessage();
-        showleaderboard();
-        }
-    const page=1;
-    axios.get(`http://54.238.228.126:3000/expense/get-expense?page=${page}`,{headers: {'Authentication' :token}})
-   .then((response)  =>{
-     console.log(response.data.expenses);
-     for(var i=0;i<response.data.expenses.length;i++){
-        showUserOnScreen(response.data.expenses[i])
-     }
-    //showexpense(response.data.expenses);
-    //showPagination(response.data)
-    console.log("pagedata",response.data);
-
-   } )
-   .catch((err)=>{
-    console.log(err);
-    document.body.innerHTML=`<div style="color:red;">${err.message} <div>`
-   })
-});
-/*
-function showPagination({
-    currentPage,
-    hasNextPage,
-    nextPage,
-    hasPreviousPage,
-    previousPage,
-    lastPage,
-}){
-    pagination.innerHTML='';
-    if(hasPreviousPage){
-        const btn2=document.createElement('button')
-        btn2.innerHTML=previousPage
-        btn2.addEventListener('click',()=>getExpenses(previousPage))
-        pagination.appendChild(btn2)
-    }
-
-    const btn1=document.createElement('button')
-    btn1.innerHTML=`<h3>${currentPage}</h3>`
-    btn1.addEventListener('click',()=>getExpenses(currentPage))
-    pagination.appendChild(btn1)
-
-    if(hasNextPage){
-        const btn3=document.createElement('button')
-        btn3.innerHTML=nextPage
-        btn3.addEventListener('click',()=>getExpenses(nextPage))
-        pagination.appendChild(btn3)
-    }
-}
-
-function getExpenses(page){
-    const token=localStorage.getItem('token');
-    const response=axios.get(`http://localhost:3000/expense/get-expense?page=${page}`,{headers: {'Authentication' :token}})
-    .then((response)  =>{
-        console.log(response);
-        // for(var i=0;i<response.data.expenses.length;i++){
-        //    showUserOnScreen(response.data.expenses[i])
-        // }
-        
-       
-    showexpense(response.data.expenses);
-    showPagination(response.data)
-    })
-    .catch((err)=>
-        console.log(err)
-    );
-}
-
-*/
 function showUserOnScreen(user){
     var parentNode=document.getElementById('listOfExpense');
     console.log('parentnode',parentNode);
@@ -289,11 +151,10 @@ function showUserOnScreen(user){
     <button onclick=EditExpense('${user.id}')> Edit Expense </button>
     </li>`
     parentNode.innerHTML=parentNode.innerHTML+childHTML;
-   // parentNode.appendChild(childHTML);
 }
 
 function deleteExpense(userid){
-          axios.delete(`http://54.238.228.126:3000/expense/delete-expense/${userid}`)
+          axios.delete(`http://localhost:3000/expense/delete-expense/${userid}`)
               .then((response) =>{
                removeUserFromScreen(userid)
                localStorage.removeItem(userid);
@@ -313,7 +174,7 @@ function removeUserFromScreen(userid){
 }
 
 function EditExpense(userid){
-    axios.get(`http://54.238.228.126:3000/expense/get-expense/${userid}`)
+    axios.get(`http://localhost:3000/expense/get-expense/${userid}`)
    .then((response) =>{
     console.log(response.data.editexpenseid);
     document.getElementById('amount').value=response.data.editexpenseid.expenseAmount;
@@ -327,3 +188,63 @@ function EditExpense(userid){
    })
 }
 
+let rowperpage;
+perpage.addEventListener('input',(e)=>{
+    rowperpage=e.target.value;
+    const page=1;
+    getExpenses(page);
+})
+
+
+const getExpenses=function(page){
+    const token=localStorage.getItem('token');
+    const res=axios.get(`http://localhost:3000/expense/get-expense?page=${page}`,
+    {headers: {'Authentication' :token ,'rowperpage':rowperpage }})
+    
+    .then(res=>{
+        if (res.data.premiumuser==true){
+            showleaderboard()
+            showpremiumusermessage();
+        }
+        expenseList.innerHTML='';
+        res.data.allExpenses.forEach(element => {
+            showUserOnScreen(element);
+        pagination(res.data.currentPage,res.data.hasNextPage,res.data.nextPage,res.data.hasPreviousPage,res.data.previousPage)
+    })
+    }).catch(err=>showError(err));
+};
+
+
+function pagination(currentPage,hasNextPage,nextPage,hasPreviousPage,previousPage){
+    pages.innerHTML='';
+    if (hasPreviousPage){
+        const prevBtn=document.createElement('button')
+        prevBtn.innerHTML=previousPage;
+        pages.appendChild(prevBtn);
+        prevBtn.addEventListener('click',()=>{
+            getExpenses(previousPage)
+            });
+    }
+
+    const curBtn=document.createElement('button')
+    curBtn.innerHTML=currentPage;
+    pages.appendChild(curBtn);
+    curBtn.addEventListener('click',()=>{
+        getExpenses(currentPage)
+        });
+
+
+    if (hasNextPage){
+        const nexBtn=document.createElement('button')
+        nexBtn.innerHTML=nextPage;
+        pages.appendChild(nexBtn);
+        nexBtn.addEventListener('click',()=>{
+            getExpenses(nextPage)
+            });
+    }
+}
+
+window.addEventListener('load', ()=>{
+    const page=1;
+    getExpenses(page)
+})

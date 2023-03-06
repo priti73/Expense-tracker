@@ -6,7 +6,7 @@ async function login(e){
          let logindetails={
           email:email.value
         }
-         const response= await axios.post("http://54.238.228.126:3000/password/forgotpassword",logindetails)
+         const response= await axios.post("http://localhost:3000/password/forgotpassword",logindetails)
          console.log(response.status);
         }
         catch(err){
