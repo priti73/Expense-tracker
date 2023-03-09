@@ -6,7 +6,7 @@ const msg=document.querySelector('.msg');
 const pages=document.querySelector('.pagination');
 const perpage=document.getElementById('perpage');
 var expenseList=document.getElementById("listOfExpense");
-
+const reportbtn=document.getElementById('report')
 
 
 document.getElementById('submit').onclick=async function(e){
@@ -52,7 +52,6 @@ document.getElementById('rzp-button').onclick=async function(e){
             },{ headers:{'Authentication' :token}})
             alert('you are a premium User now')
            showpremiumusermessage();
-           showleaderboard();
            console.log(response);
            localStorage.setItem('token',res.data.token);
         },
@@ -83,25 +82,6 @@ function parseJwt (token) {
  function showpremiumusermessage(){
     document.getElementById('text').innerHTML='You are a premium user now';
     document.getElementById('rzp-button').style.visibility='hidden'; 
-    /*const div = document.createElement('div');
-    div.id = 'test';   
-    div.innerHTML=`<label for="income">Income:</label>
-                  <input type="text" id="income">`;
-    document.getElementById('desc').appendChild(div);  
-    const dailybutton=document.createElement('button');
-    dailybutton.id='day';
-    dailybutton.textContent="dailyexpense";
-    document.getElementById('my-form').appendChild(dailybutton);
-
-    const weaklybutton=document.createElement('button');
-    weaklybutton.id='daily';
-    weaklybutton.textContent="weaklyexpense";
-    document.getElementById('my-form').appendChild(weaklybutton);
-
-    const monthlybutton=document.createElement('button');
-    monthlybutton.id='month';
-    monthlybutton.textContent="monthlyexpense";
-    document.getElementById('my-form').appendChild(monthlybutton);*/
  }
 
  function download(){
@@ -109,8 +89,6 @@ function parseJwt (token) {
     axios.get('http://localhost:3000/expense/download', { headers: {"Authentication" : token} })
     .then((response) => {
         if(response.status === 200){
-            //the bcakend is essentially sending a download link
-            //  which if we open in browser, the file would download
             var a = document.createElement("a");
             a.href = response.data.fileurl;
             a.download = 'myexpense.csv';
@@ -121,26 +99,24 @@ function parseJwt (token) {
 
     })
     .catch((err) => {
-        showError(err)
         document.body.innerHTML=`<div style="color:red;">${'You have to buy premium subscription'} <div>`
     });
 }
 
-function showleaderboard(){
-    const innputElement=document.createElement('input');
-    innputElement.type="button";
-    innputElement.value="Show Leaderboard";
-    innputElement.onclick=async()=>{
+async function showleaderboard(){
+    // const innputElement=document.createElement('input');
+    // innputElement.type="button";
+    // innputElement.value="Show Leaderboard";
+   // innputElement.onclick=async()=>{
     const token=localStorage.getItem('token');
-    console.log(token);
        const userleaderarray=await axios.get('http://localhost:3000/premium/leaderboard',{headers: {'Authentication' :token}})
        var leaderboardelem=document.getElementById('leaderboard'); 
        leaderboardelem.innerHTML +=`<h1>Leader board</h1>`
        userleaderarray.data.forEach((userdetails) => {
        leaderboardelem.innerHTML+=`<li>Name -${userdetails.name} TotalExpense -${userdetails.totalexpense}</li>`
        });
-    } 
-    document.getElementById('text').appendChild(innputElement);
+  //  } 
+   // document.getElementById('text').appendChild(innputElement);
     
 }
 function showUserOnScreen(user){
@@ -188,6 +164,16 @@ function EditExpense(userid){
    })
 }
 
+const getReport=function(){
+    document.getElementById('downloadexpense').style.display='block'
+    console.log("clicked")
+}
+
+const report=function(){
+    const reportdetails=document.getElementById('show-report')
+    reportdetails.addEventListener('click',getReport)
+}
+
 let rowperpage;
 perpage.addEventListener('input',(e)=>{
     rowperpage=e.target.value;
@@ -203,7 +189,7 @@ const getExpenses=function(page){
     
     .then(res=>{
         if (res.data.premiumuser==true){
-            showleaderboard()
+            
             showpremiumusermessage();
         }
         expenseList.innerHTML='';

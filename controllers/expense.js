@@ -36,10 +36,8 @@ exports.postExpense=async (req,res,next)=>{
          await t.commit();
          console.log('new expense');
          res.status(201).json({newexpense:data});
-       
-      }
-      
-    catch(err){
+         }
+      catch(err){
       await t.rollback();
        res.status(500).json({
           error: err
@@ -52,13 +50,8 @@ exports.deleteExpense = async (req, res, next) => {
    try{
         const expenseid=req.params.id;
         const expense=await Expense.findByPk(expenseid);
-        console.log(expense.signupId);
         const user=await User.findByPk(expense.signupId);
-        console.log(user.email);
-        console.log(user.totalexpense);
         const totalexpense=(user.totalexpense)-(expense.expenseAmount);
-        console.log(expense.expenseAmount);
-        console.log(totalexpense);
         await User.update({
             totalexpense:totalexpense
          },{
@@ -66,7 +59,6 @@ exports.deleteExpense = async (req, res, next) => {
             transaction :t
          })
           await t.commit();
-         console.log('delete user');
          await Expense.destroy({where: {id: expenseid}});
          res.status(201).json({deleteexpenseid:expenseid});
       }
@@ -82,9 +74,8 @@ exports.deleteExpense = async (req, res, next) => {
 
 exports.getoneExpense = async (req, res, next) => {
    try{
-         const expenseId=req.params.id;
+        const expenseId=req.params.id;
         const expense=await Expense.findByPk(expenseId);
-        console.log('getedit user');
         res.status(201).json({editexpenseid: expense});
       }
    
@@ -103,10 +94,9 @@ exports.downloadfile=async (req,res)=>{
    const expense=await Userservices.getExpenses(req);
   if(ispremiumuser){
    const stringifiedExpense=JSON.stringify(expense);
-   console.log(stringifiedExpense);
       const filename=`Expense${req.user.id}/${new DATE()}.txt`;
       const fileurl= await S3services.uploadToS3(stringifiedExpense,filename);
-     const file=await Downloadedexpense.create({
+      const file=await Downloadedexpense.create({
          signupId:req.user.id,
          fileurl:fileurl
       })
@@ -126,9 +116,7 @@ exports.downloadfile=async (req,res)=>{
 exports.getExpenses=async (req, res)=>{
    try{
        const page= +req.query.page || 1;
-       console.log('page',page);
        let ITEM_PER_PAGE=+req.headers.rowperpage || 2;
-        console.log('rowperpage',req.headers.rowperpage)
 
         const totalCount = await Expense.count({'userId':req.user.id});
        
