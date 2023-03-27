@@ -21,16 +21,17 @@ exports.login= async (req,res,next)=>{
        if(validatestring(email) || validatestring(password)){
          return res.status(400).json({error:"ALL feilds are required"})
          }
-       const user=await signup.findAll({where : {email}})
-       if(user.length>0){
-           bcrypt.compare(password,user[0].password,(err,result)=>{
+         const user = await signup.findOne({ email });
+
+       if(user){
+           bcrypt.compare(password,user.password,(err,result)=>{
             if(err){
               res.status(500).json({  message:"something went wrong"})
             }
             else if(result===true){
-            console.log(user[0].password);
+            console.log(user.password);
             res.status(201).json({ success: true, message:"user logged successfully"
-          ,token:generateToken(user[0].id,user[0].name,user[0].ispremiumuser)})
+          ,token:generateToken(user.id,user.name,user.ispremiumuser)})
             }
     
             else{

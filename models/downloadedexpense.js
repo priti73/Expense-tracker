@@ -1,15 +1,33 @@
-const Sequelize=require('sequelize');
+// const Sequelize=require('sequelize');
 
-const sequelize=require('../util/database');
+// const sequelize=require('../util/database');
 
-const Downloadedexpense=sequelize.define('downloadedexpense',{
-  id:{
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    allowNull: false,
-    primaryKey: true
+// const Downloadedexpense=sequelize.define('downloadedexpense',{
+//   id:{
+//     type: Sequelize.INTEGER,
+//     autoIncrement: true,
+//     allowNull: false,
+//     primaryKey: true
+//   },
+//   fileurl:Sequelize.STRING
+// });
+
+// module.exports =Downloadedexpense;
+
+const mongoose = require('mongoose');
+
+const downloadedExpenseSchema = new mongoose.Schema({
+  signupId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'signup',
+    required: true
   },
-  fileurl:Sequelize.STRING
+  fileUrl: {
+    type: String,
+    required: true
+  }
 });
 
-module.exports =Downloadedexpense;
+const DownloadedExpense = mongoose.model('DownloadedExpense', downloadedExpenseSchema);
+
+module.exports = DownloadedExpense;

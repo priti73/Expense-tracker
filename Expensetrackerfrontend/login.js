@@ -12,11 +12,10 @@ const password=document.querySelector('#password');
     console.log(logindetails);
     const response= await axios.post("http://localhost:3000/users/login",
     logindetails)
+    console.log(response)
     if(response.status==201){
-        //alert(response.data.message)
-        localStorage.setItem('token',response.data.token);
-        window.location.href="./expense.html"
-       
+        localStorage.setItem('token',response.data.token)
+        window.location.href="./expense.html" 
     }
     
         }catch(err){

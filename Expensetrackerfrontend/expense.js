@@ -24,8 +24,8 @@ document.getElementById('submit').onclick=async function(e){
         }
          const token=localStorage.getItem('token');
          const response=await axios.post("http://localhost:3000/expense/add-expense",obj,{headers: {'Authentication' :token}})
-        
-          showUserOnScreen(response.data.newexpense)
+        console.log(response.data)
+          showUserOnScreen(response.data.newexpense[0])
           localStorage.setItem(response.data.newexpense.id,JSON.stringify(obj));
           console.log(response.status);
         
@@ -110,9 +110,11 @@ async function showleaderboard(){
    // innputElement.onclick=async()=>{
     const token=localStorage.getItem('token');
        const userleaderarray=await axios.get('http://localhost:3000/premium/leaderboard',{headers: {'Authentication' :token}})
+
        var leaderboardelem=document.getElementById('leaderboard'); 
        leaderboardelem.innerHTML +=`<h1>Leader board</h1>`
        userleaderarray.data.forEach((userdetails) => {
+        console.log(userdetails)
        leaderboardelem.innerHTML+=`<li>Name -${userdetails.name} TotalExpense -${userdetails.totalexpense}</li>`
        });
   //  } 
@@ -122,9 +124,9 @@ async function showleaderboard(){
 function showUserOnScreen(user){
     var parentNode=document.getElementById('listOfExpense');
     console.log('parentnode',parentNode);
-    const childHTML=`<li id=${user.id}> ${user.expenseAmount} - ${user.description} - ${user.category}
-    <button onclick=deleteExpense('${user.id}')> Delete Expense </button>
-    <button onclick=EditExpense('${user.id}')> Edit Expense </button>
+    const childHTML=`<li id=${user._id}> ${user.expenseAmount} - ${user.description} - ${user.category}
+    <button onclick=deleteExpense('${user._id}')> Delete Expense </button>
+    <button onclick=EditExpense('${user._id}')> Edit Expense </button>
     </li>`
     parentNode.innerHTML=parentNode.innerHTML+childHTML;
 }
@@ -132,6 +134,7 @@ function showUserOnScreen(user){
 function deleteExpense(userid){
           axios.delete(`http://localhost:3000/expense/delete-expense/${userid}`)
               .then((response) =>{
+                console.log(response)
                removeUserFromScreen(userid)
                localStorage.removeItem(userid);
                  })
@@ -187,13 +190,17 @@ const getExpenses=function(page){
     const res=axios.get(`http://localhost:3000/expense/get-expense?page=${page}`,
     {headers: {'Authentication' :token ,'rowperpage':rowperpage }})
     
-    .then(res=>{
-        if (res.data.premiumuser==true){
+   // .then(res=>res.json())
+    .then(res=>
+        {
+            console.log(res.data.allExpenses);
+        //       if (data.premiumuser==true){
             
-            showpremiumusermessage();
-        }
+        //        showpremiumusermessage();
+        //    }
         expenseList.innerHTML='';
         res.data.allExpenses.forEach(element => {
+            console.log(element.description)
             showUserOnScreen(element);
         pagination(res.data.currentPage,res.data.hasNextPage,res.data.nextPage,res.data.hasPreviousPage,res.data.previousPage)
     })

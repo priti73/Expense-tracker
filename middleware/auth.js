@@ -7,7 +7,7 @@ exports.authenticate=(req,res,next)=>{
     console.log(token);
     const user=jwt.verify(token,process.env.JWT_SECRET_KEY);
     console.log(user.userid);
-    User.findByPk(user.userid).then(user=>{
+    User.findById(user.userid).then(user=>{
         console.log(JSON.stringify(user));
         req.user=user;
         next();
