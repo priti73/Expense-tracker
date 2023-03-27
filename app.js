@@ -3,13 +3,14 @@ const fs=require('fs');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose=require('mongoose');
 //const helmet = require("helmet");
 //const compresion=require("compression");
 //const morgan=require("morgan");
 
 
 //const errorController = require('./controllers/error');
-const sequelize=require('./util/database');
+//const sequelize=require('./util/database');
 const User=require('./models/signup');
 const Expense=require('./models/expense');
 const Order=require('./models/orders');
@@ -62,25 +63,34 @@ console.log('url',req.url);
 res.sendFile(path.join(__dirname,`Expensetrackerfrontend/${req.url}`))
 })
 
-User.hasMany(Expense);
-Expense.belongsTo(User);
-User.hasMany(Order);
-Order.belongsTo(User);
-User.hasMany(Forgotpassword);
-Forgotpassword.belongsTo(User);
-User.hasMany(downloadedexpense);
-downloadedexpense.belongsTo(User);
+// User.hasMany(Expense);
+// Expense.belongsTo(User);
+// User.hasMany(Order);
+// Order.belongsTo(User);
+// User.hasMany(Forgotpassword);
+// Forgotpassword.belongsTo(User);
+// User.hasMany(downloadedexpense);
+// downloadedexpense.belongsTo(User);
 
 
-sequelize
-.sync()
-//.sync({force: true})
+// sequelize
+// .sync()
+// //.sync({force: true})
+// .then(result=>{
+//    app.listen(3000);
+// })
+// .catch(err=>{
+//     console.log(err);
+// }); 
+
+mongoose
+.connect('mongodb+srv://Priti:dkr3IEHu6N6blmrG@cluster0.qcc5swb.mongodb.net/user?retryWrites=true&w=majority')
 .then(result=>{
-   app.listen(3000);
+  app.listen(3000);
+
+}).catch(err=>{
+  console.log(err);
 })
-.catch(err=>{
-    console.log(err);
-}); 
 
 
 
